@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+    <head>
+        <meta charset="utf-8">
+        <meta name ="viewport" content="width=device-width, initial-scale=1">
+        <title>Web Development Coursework - Contacts App - BOO419772</title>
+
+        <!-- This may not pass CSS validation as it uses vendor extensions and jQuery has been discontinued.
+        The errors and warnings that show on CSS validator are all for the same line of code (line 3), meaning
+        the issue is within the jQuery stylesheet. In addition, the HTML should pass validation. However, there may
+        be an empty header warning. This header is not empty, the content is gathered from script.js functions. -->
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" type="text/css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="script.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+
+    <body>
+        <!-- HOME PAGE -->
+        <div data-role="page" id="page_home" data-theme="b">
+            <div data-role="header">
+                <a href="#page_home" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+                <h1>My Contacts</h1>
+                <a href="#page_add" class="ui-btn ui-corner-all ui-shadow ui-icon-edit ui-btn-icon-right">Add</a>
+            </div>
+
+            <!-- Populate list of contacts from personsArray in script.js -->
+            <div data-role="main" class="ui-content">
+                <ul id="list_contacts" data-role="listview" data-filter="true" data-filter-placeholder="Search" data-inset="true">
+                </ul>
+                <hr>
+                <h3 style="text-align: center" id="number_of_contacts"></h3>
+            </div>
+
+            <div data-role="footer">
+                <h4>By Martin Nolan</h4>
+            </div>
+        </div>
+        <!-- END OF HOME PAGE -->
+
+
+
+        <!-- ADD PAGE -->
+        <div data-role="page" id="page_add" data-theme="b">
+            <div data-role="header">
+                <a href="#page_home" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+                <h1>New Contact</h1>
+            </div>
+
+            <div data-role="main" class="ui-content">
+                <!-- Display contact image -->
+                <div class="centerPic">
+                    <img src="icon.png" class="img_placeholder" alt="Contact Photo" style="height:225px; width:200px;  display: block;
+                         margin-left: auto; margin-right: auto;">
+                </div>
+
+                <!-- Add new contact details, ensuring the input elements do not autocomplete and
+                can be validated using maxlength, email pattern, required, and type=email
+                However, the form does not seem to be validated when it is submitted. -->
+                <form id="form_add">
+                    <label for="tf_firstname">First Name: </label>
+                    <input type="text" id ="tf_firstname" autocomplete="off" size="20" maxlength="20" placeholder="First Name" required>
+                    <label for="tf_surname">Last Name: </label>
+                    <input type="text" id ="tf_surname"  autocomplete="off" size="20" maxlength="20" placeholder="Last Name" required>
+                    <label for="tf_mobileno">Phone Number: </label>
+                    <input type="tel" id ="tf_mobileno"  autocomplete="off" size="15" maxlength="15" placeholder="Phone Number" required>
+                    <label for="tf_email">Email: </label>
+                    <input type="email" pattern="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$"
+                           id ="tf_email" autocomplete="off" title="Please provide a valid email address."
+                           size="64" maxlength="64" placeholder="Email Address" required>
+
+                    <!-- When the add button is clicked, send the contact details to personsArray in script.js -->
+                    <a href="#page_home" id="btn_add" data-role="button">Add</a>
+                </form>
+            </div>
+        </div>
+        <!-- END OF ADD PAGE -->
+
+
+
+        <!-- CONTACT DETAILS PAGE -->
+        <div data-role="page" id="page_contactDetails" data-theme="b">
+            <div data-role="header">
+                <a href="#page_home" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+                <h1>Contact Details</h1>
+                <a href="#page_edit" id="btn_edit_main" class="ui-btn ui-corner-all ui-shadow ui-icon-edit ui-btn-icon-right">Edit</a>
+            </div>
+
+            <div data-role="main" class="ui-content">
+                <!-- Display contact image -->
+                <div class="centerPic">
+                    <img src="icon.png" class="img_placeholder" alt="Contact Photo" style="height:225px; width:200px;  display: block;
+                         margin-left: auto; margin-right: auto;">
+                    <h2 id="name" style="text-align: center"></h2>
+                </div>
+
+                <!-- Display contact details for selected contact from personsArray in script.js -->
+                <h4 id="contactDetails" ></h4>
+
+                <div style="text-align: center;">
+                    <!-- Display buttons for message, call, and email -->
+                    <a href="#pop_message" data-rel="popup" data-position-to="window" data-transition="pop"  class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-comment ui-btn-inline">Text</a>
+                    <a href="#pop_call" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone ui-btn-inline">Call</a>
+                    <a href="#pop_email" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-mail ui-btn-inline">Email</a>
+
+                    <!-- Display a popup message to explain that the user cannot currently send a message -->
+                    <div data-role="popup" id="pop_message" data-theme="b" data-dismissible="true" style="max-width:400px;">
+                        <div data-role="header" data-theme="b">
+                            <h1>System Message</h1>
+                        </div>
+                        <div data-role="main" class="ui-content">
+                            <h3 class="ui-title">Unfortunately you cannot send a text message at this time.</h3>
+                            <div style="text-align: center;"><a data-role="button" data-inline="true" data-theme="b" data-rel="back">OK</a></div>
+                        </div>
+                    </div>
+
+                    <!-- Display a popup message to explain that the user cannot currently make a call -->
+                    <div data-role="popup" id="pop_call" data-theme="b" data-dismissible="true" style="max-width:400px;">
+                        <div data-role="header" data-theme="b">
+                            <h1>System Message</h1>
+                        </div>
+                        <div data-role="main" class="ui-content">
+                            <h3 class="ui-title">Unfortunately you cannot call  at this time.</h3>
+                            <div style="text-align: center;"><a data-role="button" data-inline="true" data-theme="b" data-rel="back">OK</a></div>
+                        </div>
+                    </div>
+
+                    <!-- Display a popup message to explain that the user cannot currently send an email -->
+                    <div data-role="popup" id="pop_email" data-theme="b" data-dismissible="true" style="max-width:400px;">
+                        <div data-role="header" data-theme="b">
+                            <h1>System Message</h1>
+                        </div>
+                        <div data-role="main" class="ui-content">
+                            <h3 class="ui-title">Unfortunately you cannot send an email at this time.</h3>
+                            <div style="text-align: center;"><a data-role="button" data-inline="true" data-theme="b" data-rel="back">OK</a></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- END OF CONTACT DETAILS PAGE -->
+
+
+
+        <!-- EDIT CONTACT DETAILS PAGE -->
+        <div data-role="page" id="page_edit" data-theme="b">
+            <div data-role="header">
+                <a href="#page_home" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+                <h1>Edit Details</h1>
+            </div>
+
+            <div data-role="main" class="ui-content">
+                <!-- Display contact image -->
+                <div class="centerPic">
+                    <img src="icon.png" class="img_placeholder" alt="Contact Photo" style="height:225px; width:200px;  display: block;
+                         margin-left: auto; margin-right: auto;">
+                </div>
+
+                <!-- Edit contact details, ensuring the input elements do not autocomplete and
+                can be validated using maxlength, email pattern, required, and type=email.
+                However, the form does not seem to be validated when it is submitted.
+                These are pre-populated from script.js, ensuring that only the selected
+                contact's details are shown -->
+                <form id="form_edit">
+                    <label for="tf_firstname_edit">First Name: </label>
+                    <input type="text" id ="tf_firstname_edit" autocomplete="off" size="20" maxlength="20" required>
+                    <label for="tf_surname_edit">Last Name: </label>
+                    <input type="text" id ="tf_surname_edit"  autocomplete="off" size="20" maxlength="20" required>
+                    <label for="tf_mobileno_edit">Phone Number: </label>
+                    <input type="tel" id ="tf_mobileno_edit"  autocomplete="off" size="15" maxlength="15" required>
+                    <label for="tf_email_edit">Email: </label>
+                    <input type="email" pattern="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$"
+                           id ="tf_email_edit" autocomplete="off" title="Please provide a valid email address."
+                           size="64" maxlength="64" required>
+                    <a href="#page_home" id="btn_edit" data-role="button">Confirm</a>
+                </form>
+
+                <!-- If the user clicks the delete contact button, display a popup confirmation
+                explaining that this cannot be undone. If the user continues, delete the contact
+                from personsArray in script.js and update the contact list -->
+                <a href="#pop_delContact" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-corner-all
+                   ui-shadow ui-btn-b">Delete Contact</a>
+
+                <div data-role="popup" id="pop_delContact" data-theme="b" data-dismissible="true" style="max-width:400px;">
+                    <div data-role="header" data-theme="b">
+                        <h1>Delete Contact?</h1>
+                    </div>
+
+                    <div data-role="main" class="ui-content">
+                        <h3 class="ui-title">Are you sure you want to delete this contact?</h3>
+                        <p>This action cannot be undone.</p>
+                        <div style="text-align: center"> <a data-role="button" data-inline="true" data-theme="b" data-rel="back">Cancel</a>
+                            <a href ="#page_home" id="btn_delContact" data-inline="true" data-role="button" data-theme="b" data-transition="flow">Delete</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- END OF EDIT CONTACT DETAILS PAGE -->
+
+    </body>
+</html>
